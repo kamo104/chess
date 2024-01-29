@@ -280,6 +280,22 @@ void* ClientServer::socket_thread(void* arg){
         bzero(buffer, BUFFER_LEN);
     }
 
+    printf("connection closed\n");
+    std::shared_ptr<Game> game = server->_mainServer->getGame(connection->user.id);
+    if(game == NULL){
+        printf("game not found\n");
+        connection->server->_mainServer->endConnection(connection->tid);
+        pthread_exit(NULL);
+    }
+    player_info opponentInfo = game->info.owner.user.id == connection->user.id ? game->info.opponent : game->info.owner;
+    if(opponentInfo.user.id != 0){
+        printf("sending player left your game\n");
+        char data[1];
+        data[0] = (char)ServerMessageType::PLAYER_LEFT_YOUR_GAME;
+
+        send(server->_mainServer->getConnectionInfo(opponentInfo.user.id)->client_socket, (void*)data, 1, 0);
+    }
+
     connection->server->_mainServer->deleteGame(connection->user.id);
     connection->server->_mainServer->endConnection(connection->tid);
 
