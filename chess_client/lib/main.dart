@@ -16,7 +16,7 @@ import 'network_message.dart';
 
 
 void main() async {
-  final socket = await RawSocket.connect("192.168.127.8", 9999);
+  final socket = await RawSocket.connect("localhost", 9999);
 
   AppState state = AppState();
 
@@ -130,7 +130,7 @@ void main() async {
       print("got move confirm");
       state.currentGame!.currentTurn = !state.currentGame!.currentTurn;
       state.gameMoveRequest.accepted.value = 1;
-      if(data.length == 3){
+      if(data.length == 2){
         state.currentGame!.status = GameStatus.values[data[3]];
         state.gameEnd.value = true;
       }
