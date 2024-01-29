@@ -121,11 +121,19 @@ void main() async {
 
       state.currentGame!.currentTurn = !state.currentGame!.currentTurn;
       state.opponentMove.newMove.value = true;
+      if(data.length == 7){
+        state.currentGame!.status = GameStatus.values[data[6]];
+        state.gameEnd.value = true;
+      }
       break;
     case ServerMessageType.PIECE_MOVE_CONFIRM:
       print("got move confirm");
       state.currentGame!.currentTurn = !state.currentGame!.currentTurn;
       state.gameMoveRequest.accepted.value = 1;
+      if(data.length == 3){
+        state.currentGame!.status = GameStatus.values[data[3]];
+        state.gameEnd.value = true;
+      }
       break;
     case ServerMessageType.PIECE_MOVE_REJECT:
       print("got move reject");
