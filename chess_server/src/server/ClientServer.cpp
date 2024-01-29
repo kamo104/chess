@@ -205,7 +205,7 @@ void ClientServer::onMovePiece(char* message, int length){
     if(status == GameStatus::WHITE_WON || status == GameStatus::BLACK_WON || status == GameStatus::DRAW){
         printf("sending game ended\n");
         char data3[2] = {ServerMessageType::GAME_ENDED, (char)playerColor};
-        usleep(20000);
+        usleep(1000000);
         send(my_socket, (void*)data3, 2, 0);
         send(opponent_socket, (void*)data3, 2, 0);
     }
